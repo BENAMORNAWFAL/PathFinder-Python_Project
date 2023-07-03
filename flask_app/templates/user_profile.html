@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+  <title>Profile</title>
+
+</head>
+
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-nav fixed-top" id="mainNav">
+    <a class="navbar-brand" href="/">PathFinder</a>
+
+    <div class="collapse navbar-collapse d-flex justify-content-center" id="navbarNav">
+      <form class="form-inline" action="https://www.google.com/search" method="GET" target="_blank">
+        <input class="form-control mr-sm-2 search-input" type="search" name="q" placeholder="Search in Google"
+          aria-label="Search">
+      </form>
+    </div>
+
+    <ul class="navbar-nav ml-auto">
+      <!-- Navigation links -->
+      <li class="nav-item"></li>
+      <li class="nav-item">
+        <a class="nav-link" href="/#page-top">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/#pub-uni">Public Universities</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/#pri-uni">Private Universities</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/#trai-cent">Training Center</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/#contact">Contact</a>
+      </li>
+
+      <!-- Conditional rendering based on user session -->
+      {% if session['user_id']%}
+      <ul class="navbar-nav d-flex flex-row ms-auto me-3">
+        <li class="nav-item me-3 me-lg-0 dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-mdb-toggle="dropdown"
+            aria-expanded="false">
+            <img src="{{image}}" class="rounded-circle" height="24" alt="" loading="lazy" />
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown1">
+            <li><a class="dropdown-item" href="/profile">Profile</a></li>
+            <li><a class="dropdown-item" href="/logout">Log Out</a></li>
+          </ul>
+          {% else %}
+        <li class="nav-item">
+          <a class="nav-link" href="/login">Log In</a>
+        </li>
+        {% endif %}
+      </ul>
+  </nav>
+  <br><br>
+  <div class="d-flex p-5">
+    <img src="{{image}}" style="width: 150px; height: 150px;">
+    <div class="p-3">
+      <h6>{{user.first_name}} {{user.last_name}}</h6>
+      <h6>{{user.email }}</h6>
+      <h6 class="text-primary">25 comments</h6>
+    </div>
+    <div>
+      <a class="text-primary" href="/profile/edit">Edit</a>
+    </div>
+  </div>
+  <hr>
+  <div>
+    {% if user.is_creator == 0 %}
+    <hr style="width: 3px;">
+    <h1>My Favories</h1>
+    <div class="container1">
+      {% if favory_ins != 0 :%}
+      {% for favory in favory_ins %}
+      <!-- <div style="display: flex; margin: 20px 20px; border: 2px solid black;"> -->
+        <div class="view2">
+          <div class="d-flex ">
+        <img src="{{favory.image}}" >
+
+        <div class="w-100">
+          <p>Name:{{ favory.name }}</p>
+          <p>email: {{favory.email}}</p>
+          <p>phone: {{favory.phone}}</p>
+          {% if favory.fax: %}
+          <p>fax: {{favory.fax}}</p>
+          {% endif %}
+          <p>address: {{favory.address.street}}, {{favory.address.government}}
+            {{favory.address.city}} {{favory.address.zipcode}}</p>
+        </div>
+          </div>
+          <div class="view_more"><a href="/show_institution/{{favory.id}}">View</a> | <a href="/delete/{{favory.id}}">delete</a></div>
+          
+          
+
+        </div>
+      </div>
+      {% endfor %}
+      {% endif %}
+
+    </div>
+    {%endif%}
+    {% if user.is_creator == 1 %}
+    <hr style="width: 3px;">
+    <div class="d-flex justify-content-around">
+      <h1>My Institutions</h1>
+      <a class="text-primary" href="/add_institution">Add Institution</a>
+    </div>
+    <div class="container1">
+      {% for institution in institutions %}
+      {%if institution.creator_id==user.id%}
+      <div class="view2">
+        <div class="d-flex ">
+          <img src="{{ institution.image }}">
+          <div class="w-100">
+            <p>Name:{{ institution.name }}</p>
+            <p>email: {{institution.email}}</p>
+            <p>phone: {{institution.phone}}</p>
+            {% if institution.fax: %}
+            <p>fax: {{institution.fax}}</p>
+            {% endif %}
+            <p>address: {{institution.address.street}}, {{institution.address.government}}
+              {{institution.address.city}} {{institution.address.zipcode}}</p>
+          </div>
+        </div>
+        <div class="view_more"><a href="/show_institution/{{ institution.id }}">View more</a> | <a
+            href="/edit/{{ institution.id }}">Edit</a> | <a href="/institution/delete/{{ institution.id }}">Delete</a>
+        </div>
+      </div>
+      {%endif%}
+      {% endfor %}
+    </div>
+    {%endif%}
+  </div>
+  <script type="text/javascript"
+    src="https://mdbootstrap.com/api/snippets/static/download/MDB5-Free_6.3.1/js/mdb.min.js"></script>
+
+</body>
+
+</html>

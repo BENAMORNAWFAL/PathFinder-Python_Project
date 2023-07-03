@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <title>Document</title>
+
+   
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-nav fixed-top" id="mainNav">
+        <a class="navbar-brand p-lg-2" href="/">PathFinder</a>
+      
+        <div class="collapse navbar-collapse d-flex justify-content-center" id="navbarNav">
+          <form class="form-inline" action="https://www.google.com/search" method="GET" target="_blank">
+            <input class="form-control mr-sm-2 search-input" type="search" name="q" placeholder="Search in Google" aria-label="Search">
+          </form>
+        </div>
+      
+        <ul class="navbar-nav ml-auto">
+          <!-- Navigation links -->
+          <li class="nav-item"></li>
+          <li class="nav-item">
+            <a class="nav-link" href="/#page-top">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/#pub-uni">Public Universities</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/#pri-uni">Private Universities</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/#trai-cent">Training Center</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/#contact">Contact</a>
+          </li>
+      
+          <!-- Conditional rendering based on user session -->
+          {% if session['user_id']%}
+          <ul class="navbar-nav d-flex flex-row ms-auto me-3">
+            <li class="nav-item me-3 me-lg-0 dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-mdb-toggle="dropdown"
+                aria-expanded="false">
+                <img src="{{image}}" class="rounded-circle" height="24" alt="" loading="lazy" />
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown1">
+                <li><a class="dropdown-item" href="/profile">Profile</a></li>
+                <li><a class="dropdown-item" href="/logout">Log Out</a></li>
+              </ul>
+          {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="/login">Log In</a>
+          </li>
+          {% endif %}
+        </ul>
+      </nav>
+      
+    <br><br><br>
+
+</head>
+<body>
+   
+    <div class="px-5 py-2">
+        <div class="d-flex justify-content-evenly ">
+            <!-- ***********************************add institution*********************************** -->
+            <div class="col-6 border border-3 p-5">
+                <h3>Edit Institution</h3>
+                <form action="/institution/edit" method="post" enctype="multipart/form-data">
+                    <div class="row my-4">
+                        <label for="type" class="form-label col">type:</label>
+                        <div class="col-9">
+                            <select name="type" class="form-select">
+                                
+                                <option value="{{institution.select_inst}}" selected>{{institution.select_inst}}</option>
+                                <option value="Public University" >Public University</option>
+                                <option value="Private University">Private University</option>
+                                <option value="Training Center">Training Center</option>        
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row my-4">
+                        <label for="name" class="form-label col">Name:</label>
+                        <div class="col-9">
+                            <input name="name" class="form-control" value="{{institution.name}}">
+                        </div>
+                        {% for message in get_flashed_messages(category_filter=["error_name"]) %}
+                        <label class="text-danger">
+                            {{message}}
+                        </label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="row my-4">
+                        <label for="government" class="form-label col">Government:</label>
+                        <div class="col-9">
+                            <input name="government" class="form-control col" value={{adresses.government}}>
+                        </div>
+                        {% for message in get_flashed_messages(category_filter=["error_government"]) %}
+                        <label class="text-danger">
+                            {{message}}
+                        </label>
+                        {% endfor %}
+                    </div>
+                    <div class="row my-4">
+                        <label for="city" class="form-label col">City:</label>
+                        <div class="col-9">
+                            <input name="city" class="form-control col" value="{{adresses.city}}">
+                        </div>
+                        {% for message in get_flashed_messages(category_filter=["error_city"]) %}
+                        <label class="text-danger">
+                            {{message}}
+                        </label>
+                        {% endfor %}
+                    </div>
+                    <div class="row my-4">
+                        <label for="zipcode" class="form-label col">ZipCode:</label>
+                        <div class="col-9">
+                            <input name="zipcode" type="number" class="form-control col" value="{{adresses.zipcode}}">
+                        </div>
+                        {% for message in get_flashed_messages(category_filter=["error_zipcode"]) %}
+                        <label class="text-danger">
+                            {{message}}
+                        </label>
+                        {% endfor %}
+                    </div>
+                    <div class="row my-4">
+                        <label for="street" class="form-label col">Street:</label>
+                        <div class="col-9">
+                            <input name="street" class="form-control col" value="{{adresses.street}}">
+                        </div>
+                        {% for message in get_flashed_messages(category_filter=["error_street"]) %}
+                        <label class="text-danger">
+                            {{message}}
+                        </label>
+                        {% endfor %}
+                    </div>
+                    <div class="row my-4">
+                        <label for="email" class="form-label col">Email:</label>
+                        <div class="col-9">
+                            <input name="email" class="form-control col" value="{{institution.email}}">
+                        </div>
+                        {% for message in get_flashed_messages(category_filter=["error_email"]) %}
+                        <label class="text-danger">
+                            {{message}}
+                        </label>
+                        {% endfor %}
+                    </div>
+                    <div class="row my-4">
+                        <label for="phone" class="form-label col">Phone:</label>
+                        <div class="col-9">
+                            <input name="phone" type="number" class="form-control col" value="{{institution.phone}}">
+                        </div>
+                        {% for message in get_flashed_messages(category_filter=["error_phone"]) %}
+                        <label class="text-danger">
+                            {{message}}
+                        </label>
+                        {% endfor %}
+                    </div>
+
+                    <div class="row my-4">
+                        <label for="fax" class="form-label col">Fax:</label>
+                        <div class="col-9">
+                            <input name="fax" type="number" class="form-control col" value="{{institution.fax}}">
+                        </div>
+                    </div>
+                    <!-- !========================================================block program -->
+                    
+                   
+                        <div id="inputContainer">
+                        {% for diplomas in diplomas %}
+                            
+                            <div class="row my-4">
+                                <label for="diploma" class="form-label col">Diploma:</label>
+                                <div class="col-9">
+                                    <input name="diploma1" class="form-control col" value="{{diplomas.diploma}}">
+                                </div>
+                                {% for message in get_flashed_messages(category_filter=["error_diploma"]) %}
+                                <label class="text-danger">
+                                    {{message}}
+                                </label>
+                                {% endfor %}
+                            </div>
+
+                            <div class="row my-4">
+                                <label for="program_tittle{{i}}" class="form-label col">Program Tittle:</label>
+                                <div class="col-9">
+                                    <input name="program_tittle1" class="form-control col" value="{{diplomas.program_tittle}}">
+                                </div>
+                                {% for message in get_flashed_messages(category_filter=["error_program_tittle"]) %}
+                                <label class="text-danger">
+                                    {{message}}
+                                </label>
+                                {% endfor %}
+                            </div>
+
+                            <div class="row my-4">
+                                <label for="description"  class="form-label col">Description:</label>
+                                <div class="col-9">
+                                    <textarea name="description{{i}}" cols="30" rows="3" class="form-control col" value="{{diplomas.description}}">{{diplomas.description}}</textarea>
+                                </div>
+                                {% for message in get_flashed_messages(category_filter=["error_description"]) %}
+                                <label class="text-danger">
+                                    {{message}}
+                                </label>
+                                {% endfor %}
+                            </div>
+                            
+                        {% endfor %}
+                        
+                        </div>
+                    
+                    <!-- !======================================================== -->
+                    <div class="d-flex justify-content-between">
+                        
+                            <input type="file"  name="files[]" id="fileInput" multiple onchange="afficherImages(event)">
+                            <button class="btn bg-body-secondary" type="button" onclick="addNewInputs()" >+Add Program</button>                            
+                    </div>
+                    <button type="submit" class="btn btn-success mt-3" style="width: 200px;">Update</button>
+                </form>
+                
+                
+            </div>
+            <!-- ***********************************Creator profile*********************************** -->
+            <div class="col-4 border border-3 p-5">
+                <h3>profile</h3>
+                <div  class="d-flex">
+                    <img src="{{image}}" alt="" style="width: 200px; height: 200px; border-radius: 50%;">
+                    <div>
+                        <p>{{user.first_name}} {{user.last_name}}</p>
+                        <p>{{user.email}}</p> 
+                    </div>
+                    
+                </div>
+                <hr>
+                    <!-- ? *********************  add the images  **********************-->
+                    <h3>Your Images</h3>
+                    {% for image in images %}
+                    <img src="{{image.name}}" class="imageclass" alt="institution images">
+                    <a  href="#">Delete</a>
+                    {% endfor %}
+                    <hr>
+                    <h3>New Images</h3>
+                    <div class="d-flex flex-column align-content-center" id="images" >
+
+                    </div>
+            </div>
+            
+        </div>
+        <input type="hidden" value="{{image.id}}" name="id">
+    </div>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/app.js') }}"></script>
+    <script type="text/javascript"
+    src="https://mdbootstrap.com/api/snippets/static/download/MDB5-Free_6.3.1/js/mdb.min.js"></script>
+</body>
+
+</html>

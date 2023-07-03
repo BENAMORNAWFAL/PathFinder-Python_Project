@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='my_style.css') }}">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Institution</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+</head>
+<style>
+   
+</style>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-nav fixed-top" id="mainNav">
+        <a class="navbar-brand p-lg-2" href="/">PathFinder</a>
+
+        <div class="collapse navbar-collapse d-flex justify-content-center" id="navbarNav">
+            <form class="form-inline" action="https://www.google.com/search" method="GET" target="_blank">
+                <input class="form-control mr-sm-2 search-input" type="search" name="q" placeholder="Search in Google"
+                    aria-label="Search">
+            </form>
+        </div>
+
+        <ul class="navbar-nav ml-auto">
+            <!-- Navigation links -->
+            <li class="nav-item"></li>
+            <li class="nav-item">
+                <a class="nav-link" href="/#page-top">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/#pub-uni">Public Universities</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/#pri-uni">Private Universities</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/#trai-cent">Training Center</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/#contact">Contact</a>
+            </li>
+
+            <!-- Conditional rendering based on user session -->
+            {% if session['user_id']%}
+            <ul class="navbar-nav d-flex flex-row ms-auto me-3">
+                <li class="nav-item me-3 me-lg-0 dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button"
+                        data-mdb-toggle="dropdown" aria-expanded="false">
+                        <img src="{{image}}" class="rounded-circle" height="24" alt="" loading="lazy" />
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown1">
+                        <li><a class="dropdown-item" href="/profile">Profile</a></li>
+                        <li><a class="dropdown-item" href="/logout">Log Out</a></li>
+                    </ul>
+                    {% else %}
+               
+                <li class="nav-item">
+                    <a class="nav-link" href="/login">Log In</a>
+                </li>
+                {% endif %}
+            </ul>
+    </nav>
+
+    <br><br><br>
+    <!-- container -->
+    <div class="px-5 py-2 col-10 m-auto">
+        <div class="d-flex justify-content-between" style="height: 300px;">
+            <div class="d-flex justify-content-between ">
+                <img style="height: 200px;  width: 200px;" src="{{institution.image}}" alt="Institution image">
+                <div class="mx-5 pr-5">
+                    <p>name: {{institution.name}}</p>
+                    <p>email: {{institution.email}}</p>
+                    <p>phone: {{institution.phone}}</p>
+                    {% if institution.fax: %}
+                    <p>fax: {{institution.fax}}</p>
+                    {% endif %}
+                    <p>address: {{address.street}}, {{address.government}} {{address.city}} {{address.zipcode}}</p>
+                    <p>rate: {{global_rate}} ★</p>
+                </div>
+            </div>
+            
+            <div class="d-flex flex-column">
+                {% if session['user_id'] %}
+                <!-- favory -->
+                {% if fav: %}
+                <span class="material-symbols-outlined fb">
+                    favorite
+                </span>
+                {% else %}
+                <a href="/add_favory/{{institution.id}}" class="icon-button">
+                    <span class="material-symbols-outlined fa">
+                        heart_plus
+                    </span>
+                </a>
+                {% endif %}
+
+
+                <!-- rate -->
+                {% if user_review: %}
+                <h5>Your rate</h5>
+                <div class="ff">
+                    {% for i in range(user_review.rate): %}
+                    <label for="star1" title="text">1</label>
+                    {% endfor %}
+                </div>
+            
+                {% else %}
+                <!-- <div class="rate "> -->
+                <h5>Rate this institution:</h5>
+                <form action="/add_reviews/{{institution.id}}" class="rate ra" method="post">
+                    <input type="radio" id="star5" name="rate" value="5" onclick="javascript: submit()" />
+                    <label for="star5" title="text">5 stars</label>
+                    <input type="radio" id="star4" name="rate" value="4" onclick="javascript: submit()" />
+                    <label for="star4" title="text">4 stars</label>
+                    <input type="radio" id="star3" name="rate" value="3" onclick="javascript: submit()" />
+                    <label for="star3" title="text">3 stars</label>
+                    <input type="radio" id="star2" name="rate" value="2" onclick="javascript: submit()" />
+                    <label for="star2" title="text">2 stars</label>
+                    <input type="radio" id="star1" name="rate" value="1" onclick="javascript: submit()" />
+                    <label for="star1" title="text">1 star</label>
+                </form>
+                {%endif%}
+                <!-- </div> -->
+                {% endif %}
+
+            </div>
+        </div>
+        <!-- main -->
+        <div class="p-5">
+            <button class="buttonnn" onclick="show('comments') ,window.location.reload()">Comments</button>
+            <button class="buttonnn" onclick="show('diplomas')">Diploma</button>
+            <button class="buttonnn" onclick="show('pictures')">Pictures</button>
+        </div>
+        <div id="main_place">
+            main
+        </div>
+        <div id="diplomas" style="display:none">
+            {% for diploma in diplomas %}
+            <p>Diploma: {{diploma.diploma}}</p>
+            <p>Program title: {{diploma.program_tittle}}</p>
+            <p>Description: {{diploma.description}}</p>
+            {% endfor %}
+        </div>
+
+        <div id="pictures" style="display:none">
+            {% for image in images %}
+            <img class="size" src="{{image.name}}" alt="institution images">
+            {% endfor %}
+        </div>
+
+        <div id="comments" style="display:none">
+            <h4>Comments:</h4>
+            <!-- Existing comments -->
+            <div>
+                {% if comments: %}
+                {% for comment in comments %}
+                <div>
+                    <h5>{{comment.full_name}}</h5>
+                    <p>{{comment.comment}}</p>
+                </div>
+                {% endfor %}
+                {% endif %}
+            </div>
+            <div id="new_comments">
+            </div>
+            {% if session['user_id'] %}
+            <label for="comment" class="form-label">Comments:</label>
+            
+            <form id="comment-form" action="/add_comment/{{institution.id}}" method="post">
+                <textarea class="form-control w-50" name="comment" cols="60" rows="5"></textarea>
+                <button class="btn btn-primary mt-3">Add comment</button>
+
+            </form>
+            {% endif %}
+        </div>
+
+
+        <script>
+            // main
+            document.getElementById("main_place").addEventListener("load", show('comments'));
+            function show(param_div_id) {
+                document.getElementById('main_place').innerHTML = document.getElementById(param_div_id).innerHTML;
+            }
+        </script>
+        <script>
+            $(document).ready(function () {
+                $('#comment-form').on('submit', function (event) {
+                    event.preventDefault(); // Prevent form submission
+                    event.stopPropagation(); // Stop event propagation
+                    // Retrieve form data
+                    var formData = $(this).serialize();
+
+                    // Perform AJAX POST request
+                    $.ajax({
+                        url: '/add_comment/{{institution.id}}', // Replace with your Flask route
+                        type: 'POST',
+                        data: formData,
+                        success: function (response) {
+                            // Handle success response
+                            console.log(response);
+
+
+                            // Append the new comment to the comment section
+                            var newComment = $('<div>');
+                            newComment.html('<h5>' + response.full_name + '</h5><p>' + response.comment + '</p>');
+                            $('#new_comments').append(newComment);
+
+                            // Show the comment section
+                            $('#new_comments').show();
+
+                            // Reset the form
+                            $('#comment-form')[0].reset();
+                        },
+                        error: function (error) {
+                            // Handle error response
+                            console.log(error);
+                        }
+                    });
+                });
+
+            });
+        </script>
+        <script type="text/javascript"
+        src="https://mdbootstrap.com/api/snippets/static/download/MDB5-Free_6.3.1/js/mdb.min.js"></script>
+      <script type="text/javascript" src="{{ url_for('static', filename='js/app.js') }}"></script>
+    </div>
+</body>
+
+</html>

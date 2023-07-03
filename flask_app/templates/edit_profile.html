@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+   
+    <title>Edit Profile</title>
+</head>
+<style>
+
+
+    /**
+     * Panels
+     */
+    /*** General styles ***/
+    .panel {
+        box-shadow: none;
+    }
+
+    .panel-heading {
+        border-bottom: 0;
+    }
+
+    .panel-title {
+        font-size: 17px;
+    }
+
+    .panel-title>small {
+        font-size: .75em;
+        color: #999999;
+    }
+
+    .panel-body *:first-child {
+        margin-top: 0;
+    }
+
+    .panel-footer {
+        border-top: 0;
+    }
+
+    .panel-default>.panel-heading {
+        color: #333333;
+        background-color: transparent;
+        border-color: rgba(0, 0, 0, 0.07);
+    }
+
+    form label {
+        color: #999999;
+        font-weight: 400;
+    }
+
+    .form-horizontal .form-group {
+        margin-left: -15px;
+        margin-right: -15px;
+    }
+
+    @media (min-width: 768px) {
+        .form-horizontal .control-label {
+            text-align: right;
+            margin-bottom: 0;
+            padding-top: 7px;
+        }
+    }
+
+    .profile__contact-info-icon {
+        float: left;
+        font-size: 18px;
+        color: #999999;
+    }
+
+    .profile__contact-info-body {
+        overflow: hidden;
+        padding-left: 20px;
+        color: #999999;
+    }
+
+    .profile-avatar {
+        width: 200px;
+        position: relative;
+        margin: 0px auto;
+        margin-top: 196px;
+        border: 4px solid #f3f3f3;
+    }
+</style>
+
+<body>
+
+
+
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+    <div class="container bootstrap snippets bootdeys ">
+        <div class="row m-5 justify-content-center">
+            <div class="col-xs-12 col-sm-9">
+                <form class="form-horizontal" action="/profile/update" method="post" enctype="multipart/form-data">
+                    <div class="panel panel-default">
+                        <div class="panel-body text-center">
+                            <img src="{{image}}"
+                                class="user_img" alt="User avatar">
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h1 class="p-3 text-md-center">User info</h1>
+                        </div>
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <label class="col-sm-2 ">First Name</label>
+                                <div class="col-sm-12">
+                                    <input type="text" class="form-control" name="first_name" value="{{user.first_name}}">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 ">Last Name</label>
+                                <div class="col-sm-12">
+                                    <input type="text" class="form-control" name="last_name" value="{{user.last_name}}">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <dl>
+                                    <label class="col-sm-2 ">Edit your picture: </label>
+                                    <div class="col-sm-12">
+                                        <input type="file" class="form-control" name="file" value="">
+                                    </div>
+                                </dl>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-12 col-sm-offset-2 mt-5">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+
+
+                        <input type="hidden" value="{{user.id}}" name="id">
+
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- <h1 style="color:#6413a7;"> Welcome to TARI9I</h1>
+        <div  style="display:flex; flex-direction: row; justify-content: space-evenly; margin-top: 20px;">
+            <div class="btn btn-dark" style="width:400px;">
+                <h3>
+                    Edit Profile
+                </h3>
+                
+                {% with messages = get_flashed_messages(category_filter=["register"]) %} 
+                    {% if messages %} 
+                        {% for message in messages %} 
+                        <p style="color:red">{{message}}</p> 
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+                <form action="/profile/update" method="post" enctype="multipart/form-data" >
+                    <div class="form-group text-center">
+                        <label style="font-weight: bold;">First Name: </label>
+                        <input type="text" class="form-control" name="first_name" value="{{user.first_name}}">
+                    </div>
+                    <div class="form-group text-center">
+                        <label style="font-weight: bold;">Last Name: </label>
+                        <input type="text" class="form-control" name="last_name" value="{{user.last_name}}">
+                    </div>
+                    <div class="form-group text-center">
+                        <dl>
+                            <label style="font-weight: bold;">Edit your picture: </label>
+                            <input type="file" class="form-control" name="file" value="">
+                        </dl>
+                    </div>
+                    <div class="form-group text-center">
+                        <button type="submit" class="btn btn-warning">Update</button>
+                    </div>
+                    <input type="hidden" value="{{user.id}}" name="id">
+                </form>
+            </div>
+             -->
+</body>
+
+</html>

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <title>dashboard</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body id="page-top">
+
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-nav fixed-top" id="mainNav">
+    <a class="navbar-brand" href="/">PathFinder</a>
+  
+    <div class="collapse navbar-collapse d-flex justify-content-center" id="navbarNav">
+      <form class="form-inline" action="https://www.google.com/search" method="GET" target="_blank">
+        <input class="form-control mr-sm-2 search-input" type="search" name="q" placeholder="Search" aria-label="Search">
+      </form>
+    </div>
+  
+    <ul class="navbar-nav ml-auto">
+      <!-- Navigation links -->
+      <li class="nav-item"></li>
+      <li class="nav-item">
+        <a class="nav-link" href="#page-top">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#pub-uni">Public Universities</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#pri-uni">Private Universities</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#trai-cent">Training Center</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#contact">Contact</a>
+      </li>
+  
+      <!-- Conditional rendering based on user session -->
+      {% if session['user_id']%}
+      <ul class="navbar-nav d-flex flex-row ms-auto me-3">
+        <li class="nav-item me-3 me-lg-0 dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-mdb-toggle="dropdown"
+            aria-expanded="false">
+            <img src="{{image}}" class="rounded-circle" height="24" alt="" loading="lazy" />
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown1">
+            <li><a class="dropdown-item" href="/profile">Profile</a></li>
+            <li><a class="dropdown-item" href="/logout">Log Out</a></li>
+          </ul>
+      {% else %}
+      <li class="nav-item">
+        <a class="nav-link" href="/login">Log In</a>
+      </li>
+      {% endif %}
+    </ul>
+  </nav>
+  
+  
+  
+  
+  <div class="container">
+    <div class="chatbox">
+      <div class="chatbox__support">
+        <div class="chatbox__header">
+          <div class="chatbox__image--header">
+            <img src="https://img.icons8.com/color/48/000000/circled-user-female-skin-type-5--v1.png" alt="image">
+          </div>
+          <div class="chatbox__content--header">
+            <h1 class="chatbox__description--header">Welcome to our chatbox!<br>
+              We are here to help you with any questions you may have.</h1>
+          </div>
+        </div>
+        <div class="chat-box ">
+          <!-- Chat messages will be added here dynamically -->
+        </div>
+        <div class="chatbox__footer">
+          <input type="text" placeholder="Write a message..." id="message-input">
+          <button class="chatbox__send--footer send__button" id="send-btn">Send</button>
+        </div>
+      </div>
+      <div class="chatbox__button">
+        <button><img src="{{ url_for('static', filename='images/chatbox-icon.svg') }}" /></button>
+      </div>
+    </div>
+  </div>
+
+<br><br>
+  <!-- Masthead-->
+  <header class="masthead d-flex justify-content-around align-end">
+    <h1 style="font-size: 6rem;"> Your Career Navigator.<br><span style="color: aqua;">   Explore, Decide, Succeed.!</span> </h1>
+    <img src="./static/images/banner-3.png" alt="" class="mt-6" >
+    <!-- <section class="banner position-relative">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-9 col-md-7">
+            <div class="banner-content">
+              <h2 class="text-white">Design Studio</h2>
+              <p class="text-white mt-4 mb-5">Dolor sit amet consectetur elit sed do eiusmod tempor incididunt labore et dolore magna.<br>aliqua enim ad minim veniam quis.</p>
+    
+              <a href="#" class="btn btn-secondary">Contact Us</a>
+            </div>
+          </div>
+          <div class="banner-img d-none d-lg-block">
+            <img src="images/banner/banner-3.png" alt="" class="img-fluid">
+          </div>
+        </div>
+      </div>
+    </section> -->
+  </header>
+
+  <!-- Public Universities-->
+  <section id="pub-uni">
+    <h2>Public Universities</h2>
+    <div class="container1">
+      {% for institution in institutions %}
+      {%if institution.select_inst=="Public University" %}
+        <div class="view1">
+          <div class="d-flex justify-content-between">
+            <img src="{{ institution.image }}" >
+            <p>{{ institution.name }}</p>
+          </div>
+          <div class="view_more"><a  href="/show_institution/{{ institution.id }}">View more</a></div>
+        </div>
+        {%endif%}
+      {% endfor %}
+    </div>
+    
+
+    <div class="pagination">
+      <button onclick="previousPage()">Previous</button>
+      <button onclick="nextPage()">Next</button>
+    </div>
+    </div>
+
+
+
+  </section>
+  <!-- Private Universities-->
+  <section id="pri-uni">
+    <h2>Private Universities</h2>
+    <div class="container1">
+      {% for institution in institutions %}
+      {%if institution.select_inst=="Private University"%}
+        <div class="view1">
+          <div class="d-flex justify-content-between">
+            <img src="{{ institution.image }}" >
+            <p>{{ institution.name }}</p>
+          </div>
+          <div class="view_more"><a  href="/show_institution/{{ institution.id }}">View more</a></div>
+        </div>
+        {%endif%}
+      {% endfor %}
+    </div>
+    <div class="pagination">
+      <button onclick="previousPage()">Previous</button>
+      <button onclick="nextPage()">Next</button>
+    </div>
+
+
+  </section>
+  <!-- Training Center-->
+  <section id="trai-cent">
+    <h2>Training Center</h2>
+    <div class="container1">
+      {% for institution in institutions %}
+      {%if institution.select_inst=="Training Center"%}
+        <div class="view1">
+          <div class="d-flex justify-content-between">
+            <img src="{{ institution.image }}" >
+            <p>{{ institution.name }}</p>
+          </div>
+          <div class="view_more"><a  href="/show_institution/{{ institution.id }}">View more</a></div>
+        </div>
+        {%endif%}
+      {% endfor %}
+    </div>
+    <div class="pagination">
+      <button onclick="previousPage()">Previous</button>
+      <button onclick="nextPage()">Next</button>
+    </div>
+
+  </section>
+  
+
+
+  <footer>
+    <div class="footer" id="contact">
+      <div class="footer-content">
+        <nav>
+          <ul style="list-style: none;">
+            <li><a class="nav-link" href="#page-top">Home</a></li>
+            <li><a class="nav-link" href="#pub-uni">Public Universities</a></li>
+            <li><a class="nav-link" href="#pri-uni">Private Universities</a></li>
+            <li><a class="nav-link" href="#trai-cent">Training Center</a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="contact-section">
+        <h3>Contact Us</h3>
+        <p>Address: 123 Contact Street, City, Country</p>
+        <p>Phone: 29108467</p>
+        <p>Email: contact@mycompany.com</p>
+      </div>
+      <p>&copy; 2023 Your Company Name. All rights reserved.</p>
+    </div>
+  </footer>
+
+
+  <script type="text/javascript"
+    src="https://mdbootstrap.com/api/snippets/static/download/MDB5-Free_6.3.1/js/mdb.min.js"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/app.js') }}"></script>
+
+</body>
+
+</html>
